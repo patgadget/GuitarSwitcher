@@ -29,14 +29,14 @@ selon une Foot Switch */
 
 void setup() {
   // Configuration des entree/sortie
-  pinMode(FS1, INPUT);
-  pinMode(FS2, INPUT);
-  pinMode(FS3, INPUT);
-  pinMode(FS4, INPUT);
-  pinMode(FS5, INPUT);
-  pinMode(FS6, INPUT);
-  pinMode(FS7, INPUT);
-  pinMode(FS8, INPUT);
+  pinMode(FS1, INPUT_PULLUP);
+  pinMode(FS2, INPUT_PULLUP);
+  pinMode(FS3, INPUT_PULLUP);
+  pinMode(FS4, INPUT_PULLUP);
+  pinMode(FS5, INPUT_PULLUP);
+  pinMode(FS6, INPUT_PULLUP);
+  pinMode(FS7, INPUT_PULLUP);
+  pinMode(FS8, INPUT_PULLUP);
 
   pinMode(R1, OUTPUT);
   pinMode(R2, OUTPUT);

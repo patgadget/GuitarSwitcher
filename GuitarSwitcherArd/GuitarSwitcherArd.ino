@@ -13,6 +13,8 @@ selon une Foot Switch */
 #define FS6 8
 #define FS7 7
 #define FS8 6
+#define FSMUTE 3
+
 
 //Definition des pins utiliser pour les sorties relais
 #define R1 A0
@@ -23,6 +25,7 @@ selon une Foot Switch */
 #define R6 A5
 #define R7 5
 #define R8 4
+#define RMUTE 2
 
 
 
@@ -37,6 +40,7 @@ void setup() {
   pinMode(FS6, INPUT_PULLUP);
   pinMode(FS7, INPUT_PULLUP);
   pinMode(FS8, INPUT_PULLUP);
+  pinMode(FSMUTE, INPUT_PULLUP);
 
   pinMode(R1, OUTPUT);
   pinMode(R2, OUTPUT);
@@ -46,6 +50,7 @@ void setup() {
   pinMode(R6, OUTPUT);
   pinMode(R7, OUTPUT);
   pinMode(R8, OUTPUT);
+  pinMode(RMUTE, OUTPUT);
 }
 
 void loop() {
@@ -58,6 +63,7 @@ void loop() {
     digitalWrite(R6,LOW);
     digitalWrite(R7,LOW);
     digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
   }
   if (!FS2){
     digitalWrite(R1,LOW);
@@ -68,6 +74,7 @@ void loop() {
     digitalWrite(R6,LOW);
     digitalWrite(R7,LOW);
     digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
   }
   if (!FS3){
     digitalWrite(R1,LOW);
@@ -78,6 +85,7 @@ void loop() {
     digitalWrite(R6,LOW);
     digitalWrite(R7,LOW);
     digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
   }
   if (!FS4){
     digitalWrite(R1,LOW);
@@ -88,6 +96,7 @@ void loop() {
     digitalWrite(R6,LOW);
     digitalWrite(R7,LOW);
     digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
   }
   if (!FS5){
     digitalWrite(R1,LOW);
@@ -98,6 +107,7 @@ void loop() {
     digitalWrite(R6,LOW);
     digitalWrite(R7,LOW);
     digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
   }
   if (!FS6){
     digitalWrite(R1,LOW);
@@ -108,6 +118,7 @@ void loop() {
     digitalWrite(R6,HIGH);
     digitalWrite(R7,LOW);
     digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
   }
   if (!FS7){
     digitalWrite(R1,LOW);
@@ -118,6 +129,7 @@ void loop() {
     digitalWrite(R6,LOW);
     digitalWrite(R7,HIGH);
     digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
   }
   if (!FS8){
     digitalWrite(R1,LOW);
@@ -128,6 +140,18 @@ void loop() {
     digitalWrite(R6,LOW);
     digitalWrite(R7,LOW);
     digitalWrite(R8,HIGH);
+    digitalWrite(RMUTE,LOW);
+  }
+  if (!FSMUTE){
+    digitalWrite(R1,LOW);
+    digitalWrite(R2,LOW);
+    digitalWrite(R3,LOW);
+    digitalWrite(R4,LOW);
+    digitalWrite(R5,LOW);
+    digitalWrite(R6,LOW);
+    digitalWrite(R7,LOW);
+    digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,HIGH);
   }
   
 }

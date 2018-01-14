@@ -13,19 +13,19 @@ selon une Foot Switch */
 #define FS6 8
 #define FS7 7
 #define FS8 6
-#define FSMUTE 3
+#define FSMUTE 5
 
 
 //Definition des pins utiliser pour les sorties relais
-#define R1 A0
-#define R2 A1
-#define R3 A2
-#define R4 A3
-#define R5 A4
-#define R6 A5
-#define R7 5
-#define R8 4
-#define RMUTE 2
+#define R1 3
+#define R2 2
+#define R3 A5
+#define R4 A4
+#define R5 A3
+#define R6 A2
+#define R7 A1
+#define R8 A0
+#define RMUTE 4
 
 
 

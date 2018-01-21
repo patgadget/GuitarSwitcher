@@ -1,8 +1,6 @@
-// DMX Receiver
-// DMX Channel 1,2,3 are copy onto RGB pin of the Arduino
-// PWM are from 0-255 on those pins.
+// Midi Receiver
+// 
 
-#define myubrr (16000000L/16/250000-1)
 
 // The only available pin for PWM are: 3,5,6,9,10,11
 #define pin_RED 11

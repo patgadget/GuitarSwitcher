@@ -11,6 +11,7 @@
 
 char incomingByte =0;
 int mainCommand=0;
+int firstByte=-1;
 void setup()
 {
   Serial1.begin(31250);
@@ -37,7 +38,7 @@ void loop()
     }
     if (incomingByte == 0xFE){
       //Drop, only Sync
-      mainCommand=0;
+      mainCommand=-1;
     }
     //Serial.print("mainCommandIN:");
     //Serial.println(mainCommand, HEX);
@@ -53,15 +54,15 @@ void loop()
       if (mainCommand==0x90){
         if (incomingByte == 0x26){
           //Serial.println("incomingByte=0x26");
-          //Note ON,
+          //Note 0x26 ON,
           digitalWrite(pin_LED, HIGH);
-          mainCommand=0x9026;
+          firstByte=0x26;
         }
         if (incomingByte == 0x27){
-          //Serial.println("incomingByte=0x26");
-          //Note ON,
+          //Serial.println("incomingByte=0x27");
+          //Note 0x27 ON
           digitalWrite(pin_LED, LOW);
-          mainCommand=0x9027;
+          firstByte=0x27;
         }
       }
     }

@@ -9,7 +9,7 @@
 #define pin_LED 13
 
 
-char incomingByte =0;
+int incomingByte =-1;
 int mainCommand=0;
 int firstByte=-1;
 void setup()
@@ -52,17 +52,32 @@ void loop()
         }
       }
       if (mainCommand==0x90){
-        if (incomingByte == 0x26){
-          //Serial.println("incomingByte=0x26");
-          //Note 0x26 ON,
-          digitalWrite(pin_LED, HIGH);
-          firstByte=0x26;
-        }
-        if (incomingByte == 0x27){
-          //Serial.println("incomingByte=0x27");
-          //Note 0x27 ON
-          digitalWrite(pin_LED, LOW);
-          firstByte=0x27;
+        if (firstByte < 0 ){
+          if (incomingByte == 0x26){
+            //Serial.println("incomingByte=0x26");
+            //Note 0x26 ON,
+            digitalWrite(pin_LED, HIGH);
+            firstByte=0x26;
+          }
+          if (incomingByte == 0x27){
+            //Serial.println("incomingByte=0x27");
+            //Note 0x27 ON
+            digitalWrite(pin_LED, LOW);
+            firstByte=0x27;
+          }
+          else{
+            if (firstByte == 0x26 ){
+              if (incomingByte | 1){ // Any Velocity
+                digitalWrite(pin_LED, HIGH);
+                
+              }
+            if (firstByte == 0x27 ){
+              if (incomingByte | 1){ // Any Velocity
+                digitalWrite(pin_LED, LOW);
+              }
+
+            }
+          }
         }
       }
     }

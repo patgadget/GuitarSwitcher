@@ -30,39 +30,41 @@ void loop()
   //Serial.print("N");
 
   if (Serial1.available() > 0) {
-    // read the incoming byte:
     incomingByte = Serial1.read();
     //Serial.println(incomingByte, HEX);
     if (incomingByte&0x80){
-      mainCommand=1;
+      mainCommand=incomingByte;
+      firstByte=-1;
     }
     if (incomingByte == 0xFE){
       //Drop, only Sync
       mainCommand=-1;
+      firstByte=-1;
     }
     //Serial.print("mainCommandIN:");
     //Serial.println(mainCommand, HEX);
     if (mainCommand > 0){
       Serial.println(incomingByte, HEX);
-      if (mainCommand==1){
+      /*if (mainCommand==0x90){
         if (incomingByte == 0x90){
           //Note ON,
           mainCommand=0x90;
           //digitalWrite(pin_LED, HIGH);
         }
       }
+      */
       if (mainCommand==0x90){
         if (firstByte < 0 ){
           if (incomingByte == 0x26){
             //Serial.println("incomingByte=0x26");
             //Note 0x26 ON,
-            digitalWrite(pin_LED, HIGH);
+            //digitalWrite(pin_LED, HIGH);
             firstByte=0x26;
           }
           if (incomingByte == 0x27){
             //Serial.println("incomingByte=0x27");
             //Note 0x27 ON
-            digitalWrite(pin_LED, LOW);
+            //digitalWrite(pin_LED, LOW);
             firstByte=0x27;
           }
           else{
@@ -71,13 +73,15 @@ void loop()
                 digitalWrite(pin_LED, HIGH);
                 
               }
+            }  
             if (firstByte == 0x27 ){
               if (incomingByte | 1){ // Any Velocity
                 digitalWrite(pin_LED, LOW);
               }
-
             }
           }
+          firstByte=-1; // Receive my 2 bytes
+
         }
       }
     }

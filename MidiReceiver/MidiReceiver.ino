@@ -40,6 +40,9 @@ void loop()
 {    
   if (Serial1.available() > 0) {
     incomingByte = Serial1.read();
+      if (incomingByte != MSG_MIDI_ACT_SENSE){ // Si ce n'est pas un ActiveSense on continue http://midi.teragonaudio.com/tech/midispec/sense.htm
+        Serial.println(incomingByte, HEX);
+      }
     // Message MIDI car le bit 7 a ON
     if (incomingByte&0x80){
       firstByte=-1; //Donc ce n'est pas un DATA

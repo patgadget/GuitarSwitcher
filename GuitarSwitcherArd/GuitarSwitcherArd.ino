@@ -45,6 +45,15 @@ Message: Program Change 1 a 8*/
 int incomingByte =-1;
 int lastValidMessage=0;
 int firstByte=-1;
+int relaisMem01=LOW;
+int relaisMem02=LOW;
+int relaisMem03=LOW;
+int relaisMem04=LOW;
+int relaisMem05=LOW;
+int relaisMem06=LOW;
+int relaisMem07=LOW;
+int relaisMem08=LOW;
+
 void setup()
 {
   //Serial1.begin(31250);
@@ -104,92 +113,84 @@ void loop()
       if (lastValidMessage == MSG_MIDI_PROG_CHG){ //et PROGRAM CHANGE
         if (firstByte < 0 ){
           if (incomingByte == 0x01){
-            digitalWrite(R1,HIGH);
-            digitalWrite(R2,LOW);
-            digitalWrite(R3,LOW);
-            digitalWrite(R4,LOW);
-            digitalWrite(R5,LOW);
-            digitalWrite(R6,LOW);
-            digitalWrite(R7,LOW);
-            digitalWrite(R8,LOW);
-            digitalWrite(RMUTE,LOW);
+            relaisMem01=HIGH;
+            relaisMem02=LOW;
+            relaisMem03=LOW;
+            relaisMem04=LOW;
+            relaisMem05=LOW;
+            relaisMem06=LOW;
+            relaisMem07=LOW;
+            relaisMem08=LOW;
           }
           if (incomingByte == 0x02){
-            digitalWrite(R1,LOW);
-            digitalWrite(R2,HIGH);
-            digitalWrite(R3,LOW);
-            digitalWrite(R4,LOW);
-            digitalWrite(R5,LOW);
-            digitalWrite(R6,LOW);
-            digitalWrite(R7,LOW);
-            digitalWrite(R8,LOW);
-            digitalWrite(RMUTE,LOW);
+            relaisMem01=LOW;
+            relaisMem02=HIGH;
+            relaisMem03=LOW;
+            relaisMem04=LOW;
+            relaisMem05=LOW;
+            relaisMem06=LOW;
+            relaisMem07=LOW;
+            relaisMem08=LOW;
           }
           if (incomingByte == 0x03){
-            digitalWrite(R1,LOW);
-            digitalWrite(R2,LOW);
-            digitalWrite(R3,HIGH);
-            digitalWrite(R4,LOW);
-            digitalWrite(R5,LOW);
-            digitalWrite(R6,LOW);
-            digitalWrite(R7,LOW);
-            digitalWrite(R8,LOW);
-            digitalWrite(RMUTE,LOW);
+            relaisMem01=LOW;
+            relaisMem02=LOW;
+            relaisMem03=HIGH;
+            relaisMem04=LOW;
+            relaisMem05=LOW;
+            relaisMem06=LOW;
+            relaisMem07=LOW;
+            relaisMem08=LOW;
           }
           if (incomingByte == 0x04){
-            digitalWrite(R1,LOW);
-            digitalWrite(R2,LOW);
-            digitalWrite(R3,LOW);
-            digitalWrite(R4,HIGH);
-            digitalWrite(R5,LOW);
-            digitalWrite(R6,LOW);
-            digitalWrite(R7,LOW);
-            digitalWrite(R8,LOW);
-            digitalWrite(RMUTE,LOW);
+            relaisMem01=LOW;
+            relaisMem02=LOW;
+            relaisMem03=LOW;
+            relaisMem04=HIGH;
+            relaisMem05=LOW;
+            relaisMem06=LOW;
+            relaisMem07=LOW;
+            relaisMem08=LOW;
           }
           if (incomingByte == 0x05){
-            digitalWrite(R1,LOW);
-            digitalWrite(R2,LOW);
-            digitalWrite(R3,LOW);
-            digitalWrite(R4,LOW);
-            digitalWrite(R5,HIGH);
-            digitalWrite(R6,LOW);
-            digitalWrite(R7,LOW);
-            digitalWrite(R8,LOW);
-            digitalWrite(RMUTE,LOW);
+            relaisMem01=LOW;
+            relaisMem02=LOW;
+            relaisMem03=LOW;
+            relaisMem04=LOW;
+            relaisMem05=HIGH;
+            relaisMem06=LOW;
+            relaisMem07=LOW;
+            relaisMem08=LOW;
           }
           if (incomingByte == 0x06){
-            digitalWrite(R1,LOW);
-            digitalWrite(R2,LOW);
-            digitalWrite(R3,LOW);
-            digitalWrite(R4,LOW);
-            digitalWrite(R5,LOW);
-            digitalWrite(R6,HIGH);
-            digitalWrite(R7,LOW);
-            digitalWrite(R8,LOW);
-            digitalWrite(RMUTE,LOW);
+            relaisMem01=LOW;
+            relaisMem02=LOW;
+            relaisMem03=LOW;
+            relaisMem04=LOW;
+            relaisMem05=LOW;
+            relaisMem06=HIGH;
+            relaisMem07=LOW;
+            relaisMem08=LOW;
           }
           if (incomingByte == 0x07){
-            digitalWrite(R1,LOW);
-            digitalWrite(R2,LOW);
-            digitalWrite(R3,LOW);
-            digitalWrite(R4,LOW);
-            digitalWrite(R5,LOW);
-            digitalWrite(R6,LOW);
-            digitalWrite(R7,HIGH);
-            digitalWrite(R8,LOW);
-            digitalWrite(RMUTE,LOW);
+            relaisMem01=LOW;
+            relaisMem02=LOW;
+            relaisMem03=LOW;
+            relaisMem04=LOW;
+            relaisMem05=LOW;
+            relaisMem06=LOW;
+            relaisMem07=HIGH;
+            relaisMem08=LOW;
           }
           if (incomingByte == 0x08){
-            digitalWrite(R1,LOW);
-            digitalWrite(R2,LOW);
-            digitalWrite(R3,LOW);
-            digitalWrite(R4,LOW);
-            digitalWrite(R5,LOW);
-            digitalWrite(R6,LOW);
-            digitalWrite(R7,LOW);
-            digitalWrite(R8,HIGH);
-            digitalWrite(RMUTE,LOW);
+            relaisMem01=LOW;
+            relaisMem02=LOW;
+            relaisMem03=LOW;
+            relaisMem04=LOW;
+            relaisMem05=LOW;
+            relaisMem06=LOW;
+            relaisMem07=LOW;
+            relaisMem08=HIGH;
           }
         firstByte=-1; // Receive my 2 bytes
         }
@@ -209,4 +210,93 @@ void loop()
       }
     }
   }
+  if (relaisMem01 == HIGH){
+    digitalWrite(R1,HIGH);
+    digitalWrite(R2,LOW);
+    digitalWrite(R3,LOW);
+    digitalWrite(R4,LOW);
+    digitalWrite(R5,LOW);
+    digitalWrite(R6,LOW);
+    digitalWrite(R7,LOW);
+    digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
+  }
+  if (relaisMem02 == HIGH){
+    digitalWrite(R1,LOW);
+    digitalWrite(R2,HIGH);
+    digitalWrite(R3,LOW);
+    digitalWrite(R4,LOW);
+    digitalWrite(R5,LOW);
+    digitalWrite(R6,LOW);
+    digitalWrite(R7,LOW);
+    digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
+  }
+  if (relaisMem03 == HIGH){
+    digitalWrite(R1,LOW);
+    digitalWrite(R2,LOW);
+    digitalWrite(R3,HIGH);
+    digitalWrite(R4,LOW);
+    digitalWrite(R5,LOW);
+    digitalWrite(R6,LOW);
+    digitalWrite(R7,LOW);
+    digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
+  }
+  if (relaisMem04 == HIGH){
+    digitalWrite(R1,LOW);
+    digitalWrite(R2,LOW);
+    digitalWrite(R3,LOW);
+    digitalWrite(R4,HIGH);
+    digitalWrite(R5,LOW);
+    digitalWrite(R6,LOW);
+    digitalWrite(R7,LOW);
+    digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
+  }
+  if (relaisMem05 == HIGH){
+    digitalWrite(R1,LOW);
+    digitalWrite(R2,LOW);
+    digitalWrite(R3,LOW);
+    digitalWrite(R4,LOW);
+    digitalWrite(R5,HIGH);
+    digitalWrite(R6,LOW);
+    digitalWrite(R7,LOW);
+    digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
+  }
+  if (relaisMem06 == HIGH){
+    digitalWrite(R1,LOW);
+    digitalWrite(R2,LOW);
+    digitalWrite(R3,LOW);
+    digitalWrite(R4,LOW);
+    digitalWrite(R5,LOW);
+    digitalWrite(R6,HIGH);
+    digitalWrite(R7,LOW);
+    digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
+  }
+  if (relaisMem07 == HIGH){
+    digitalWrite(R1,LOW);
+    digitalWrite(R2,LOW);
+    digitalWrite(R3,LOW);
+    digitalWrite(R4,LOW);
+    digitalWrite(R5,LOW);
+    digitalWrite(R6,LOW);
+    digitalWrite(R7,HIGH);
+    digitalWrite(R8,LOW);
+    digitalWrite(RMUTE,LOW);
+  }
+  if (relaisMem08 == HIGH){
+    digitalWrite(R1,LOW);
+    digitalWrite(R2,LOW);
+    digitalWrite(R3,LOW);
+    digitalWrite(R4,LOW);
+    digitalWrite(R5,LOW);
+    digitalWrite(R6,LOW);
+    digitalWrite(R7,LOW);
+    digitalWrite(R8,HIGH);
+    digitalWrite(RMUTE,LOW);
+  }
+
 }

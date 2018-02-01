@@ -6,15 +6,15 @@ Message: Program Change 1 a 8*/
 
 //Definition des pins utilise pour input des foot switch
 
-#define FS1 3
-#define FS2 12
-#define FS3 11
-#define FS4 10
-#define FS5 9
-#define FS6 8
-#define FS7 7
-#define FS8 6
-#define FSMUTE 5
+#define PB1 3
+#define PB2 12
+#define PB3 11
+#define PB4 10
+#define PB5 9
+#define PB6 8
+#define PB7 7
+#define PB8 6
+#define PBMUTE 5
 
 
 //Definition des pins utiliser pour les sorties relais
@@ -46,6 +46,8 @@ int incomingByte =-1;
 int lastValidMessage=0;
 int firstByte=-1;
 int relaisMem[10];
+int relaisOrder[] = {0, R1, R2, R3, R4, R5, R6, R7, R8, 0, 0 };
+int pushButtonOrder[] = {0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, 0, 0 };
 
 void setup()
 {
@@ -56,15 +58,15 @@ void setup()
 
 
   // Configuration des entree/sortie
-  pinMode(FS1, INPUT_PULLUP);
-  pinMode(FS2, INPUT_PULLUP);
-  pinMode(FS3, INPUT_PULLUP);
-  pinMode(FS4, INPUT_PULLUP);
-  pinMode(FS5, INPUT_PULLUP);
-  pinMode(FS6, INPUT_PULLUP);
-  pinMode(FS7, INPUT_PULLUP);
-  pinMode(FS8, INPUT_PULLUP);
-  pinMode(FSMUTE, INPUT_PULLUP);
+  pinMode(PB1, INPUT_PULLUP);
+  pinMode(PB2, INPUT_PULLUP);
+  pinMode(PB3, INPUT_PULLUP);
+  pinMode(PB4, INPUT_PULLUP);
+  pinMode(PB5, INPUT_PULLUP);
+  pinMode(PB6, INPUT_PULLUP);
+  pinMode(PB7, INPUT_PULLUP);
+  pinMode(PB8, INPUT_PULLUP);
+  pinMode(PBMUTE, INPUT_PULLUP);
 
   pinMode(R1, OUTPUT);
   pinMode(R2, OUTPUT);
@@ -108,28 +110,28 @@ void loop()
     if (lastValidMessage > 0){ //j'ai deja recu une Messagee Midi
       if (lastValidMessage == MSG_MIDI_PROG_CHG){ //et PROGRAM CHANGE
         if (firstByte < 0 ){
-          if (incomingByte == 0x01){
+          if (incomingByte == 0x00){
             relaisMemWriter(1);
           }
-          if (incomingByte == 0x02){
+          if (incomingByte == 0x01){
             relaisMemWriter(2);
           }
-          if (incomingByte == 0x03){
+          if (incomingByte == 0x02){
             relaisMemWriter(3);
           }
-          if (incomingByte == 0x04){
+          if (incomingByte == 0x03){
             relaisMemWriter(4);
           }
-          if (incomingByte == 0x05){
+          if (incomingByte == 0x04){
             relaisMemWriter(5);
           }
-          if (incomingByte == 0x06){
+          if (incomingByte == 0x05){
             relaisMemWriter(6);
           }
-          if (incomingByte == 0x07){
+          if (incomingByte == 0x06){
             relaisMemWriter(7);
           }
-          if (incomingByte == 0x08){
+          if (incomingByte == 0x07){
             relaisMemWriter(8);
           }
         firstByte=-1; // Receive my 2 bytes
@@ -150,49 +152,10 @@ void loop()
       }
     }
   }
-  for (int i=0;i<9;i++){
-    if (relaisMem[i]==1)
-      if (i==1){
-        digitalWrite(R1,HIGH);
-      }else {
-        digitalWrite(R1,LOW);
-      }
-      if (i==2){
-        digitalWrite(R2,HIGH);
-      }else {
-        digitalWrite(R2,LOW);
-      }
-      if (i==3){
-        digitalWrite(R3,HIGH);
-      }else {
-        digitalWrite(R3,LOW);
-      }
-      if (i==4){
-        digitalWrite(R4,HIGH);
-      }else {
-        digitalWrite(R4,LOW);
-      }
-      if (i==5){
-        digitalWrite(R5,HIGH);
-      }else {
-        digitalWrite(R5,LOW);
-      }
-      if (i==6){
-        digitalWrite(R6,HIGH);
-      }else {
-        digitalWrite(R6,LOW);
-      }
-      if (i==7){
-        digitalWrite(R7,HIGH);
-      }else {
-        digitalWrite(R7,LOW);
-      }
-      if (i==8){
-        digitalWrite(R8,HIGH);
-      }else {
-        digitalWrite(R8,LOW);
-      }
-  }
+  //Read Push Button and send only one into mem
+  readPushButtonToMem(); 
+  // Send the mem on the relay output
+  refreshRelaisFromMem(); 
 }
 
 void relaisMemWriter(int relaisMemNumber)
@@ -200,10 +163,43 @@ void relaisMemWriter(int relaisMemNumber)
   for (int i=1;i<9;i++){
     if (relaisMemNumber == i){
       relaisMem[i]=1;
+      clearAllMem(i); // Clear all the other mem, only one can be valid
       
     }else{
       relaisMem[i]=0;
     }
   }
+  refreshRelaisFromMem();
 }
+
+
+// send the relaisMem[] array to the output pin
+void refreshRelaisFromMem(){
+  for (int i=1;i<9;i++){
+    if (relaisMem[i]==1){
+      digitalWrite(relaisOrder[i],HIGH);
+      clearAllMem(i); //Clear all mem exept 
+    }else {
+      digitalWrite(relaisOrder[i],LOW);
+    }
+  }
+}
+
+void readPushButtonToMem()
+{
+  for (int i=1;i<9;i++){
+    if (digitalRead(pushButtonOrder[i]) == HIGH){
+      relaisMem[i]=1;
+      clearAllMem(i);
+    }
+  }
+    
+}
+void clearAllMem(int exeptRelais){
+  for (int i=0;i<9;i++){
+    if (i != exeptRelais)
+      relaisMem[i]=0;
+  }  
+}
+
 

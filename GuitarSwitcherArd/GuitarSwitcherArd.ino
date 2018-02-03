@@ -188,7 +188,7 @@ void refreshRelaisFromMem(){
 void readPushButtonToMem()
 {
   for (int i=1;i<9;i++){
-    if (digitalRead(pushButtonOrder[i]) == HIGH){
+    if (digitalRead(pushButtonOrder[i]) == LOW){
       relaisMem[i]=1;
       clearAllMem(i);
     }

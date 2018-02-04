@@ -6,7 +6,7 @@ Message: Program Change 1 a 8*/
 
 //Definition des pins utilise pour input des foot switch
 
-#define PB1 3
+#define PB1 13
 #define PB2 12
 #define PB3 11
 #define PB4 10
@@ -18,7 +18,7 @@ Message: Program Change 1 a 8*/
 
 
 //Definition des pins utiliser pour les sorties relais
-#define R1 13
+#define R1 3
 #define R2 2
 #define R3 A5
 #define R4 A4
@@ -27,6 +27,9 @@ Message: Program Change 1 a 8*/
 #define R7 A1
 #define R8 A0
 #define RMUTE 4
+#define HEARTBEAT 5
+#define HEARTBEATVALUE 1000
+
 
 // Midi Receiver
 // 
@@ -48,6 +51,7 @@ int firstByte=-1;
 int relaisMem[10];
 int relaisOrder[] = {0, R1, R2, R3, R4, R5, R6, R7, R8, 0, 0 };
 int pushButtonOrder[] = {0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, 0, 0 };
+int heartBeat=0;
 
 void setup()
 {
@@ -77,6 +81,7 @@ void setup()
   pinMode(R7, OUTPUT);
   pinMode(R8, OUTPUT);
   pinMode(RMUTE, OUTPUT);
+  pinMode(HEARTBEAT, OUTPUT);
   for (int i=0;i<10;i++){
     relaisMem[i]=0;
   }
@@ -84,7 +89,14 @@ void setup()
 }
 
 void loop()
-{    
+{ 
+  if (heartBeat-- <= 0 )
+    heartBeat = HEARTBEATVALUE;
+  if (heartBeat < (HEARTBEATVALUE / 2)){
+    digitalWrite(HEARTBEAT, 1);
+  }else {
+    digitalWrite(HEARTBEAT, 0);
+  }
   if (Serial.available() > 0) {
     incomingByte = Serial.read();
       /*if (incomingByte != MSG_MIDI_ACT_SENSE){ // Si ce n'est pas un ActiveSense on continue http://midi.teragonaudio.com/tech/midispec/sense.htm
@@ -95,7 +107,7 @@ void loop()
   if (incomingByte&0x80){
     firstByte=-1; //Donc ce n'est pas un DATA
     if (incomingByte != MSG_MIDI_ACT_SENSE){ // Si ce n'est pas un ActiveSense on continue http://midi.teragonaudio.com/tech/midispec/sense.htm
-      // Est ce la Messagee 0x90 NOTE ON?
+      // Est ce la Messagee 0xC0 PROGRAM CHANGE?
       // et le bon Channel Midi?
       if (!((incomingByte & 0xF0) ^ MSG_MIDI_PROG_CHG ) & !((incomingByte& 0x0F) ^ (MIDI_CHANNEL-1))){
         lastValidMessage= (incomingByte & 0xF0); //On Garde la partie du message de gauche et on detruit le channel Midi
@@ -103,6 +115,7 @@ void loop()
     }
     else{
       // Si c'est un timecode on srap et on repar a neuf
+      // Ou tout autre Midi Message qu'attendu et que pas bon midi Channel
       lastValidMessage=-1;
     }
   }

@@ -30,6 +30,7 @@ Message: Program Change 1 a 8*/
 #define HEARTBEAT 5
 #define HEARTBEATVALUE 1000
 #define INCHANGEDELAY 1000
+#define ONDELAY 100
 
 
 // Midi Receiver
@@ -54,6 +55,7 @@ int relaisOrder[] = {0, R1, R2, R3, R4, R5, R6, R7, R8, 0, 0 };
 int pushButtonOrder[] = {0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, 0, 0 };
 int heartBeat=0;
 int inChangeDelay=INCHANGEDELAY;
+int onDelay=ONDELAY;
 
 void setup()
 {
@@ -169,11 +171,15 @@ void loop()
   }
   //Read Push Button and send only one into mem
   readPushButtonToMem(); 
-  // Send the mem on the relay output
-  refreshRelaisFromMem(); 
+  if (onDelay>0){
+    onDelay--;
+  }else{
+    // Send the mem on the relay output
+    refreshRelaisFromMem(); 
+  }
   // Si Reste du delay on decremente
   // Sinon fin du delais, remove le MUTE
-  if (inChangeDelay){
+  if (inChangeDelay>0){
     inChangeDelay--;
   }else {
     digitalWrite(RMUTE,HIGH);
@@ -183,6 +189,7 @@ void loop()
 void relaisMemWriter(int relaisMemNumber)
 { 
   digitalWrite(RMUTE,LOW);
+  onDelay=ONDELAY;
   inChangeDelay=INCHANGEDELAY;
   for (int i=1;i<9;i++){
     if (relaisMemNumber == i){

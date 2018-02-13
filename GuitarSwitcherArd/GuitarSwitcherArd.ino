@@ -14,8 +14,6 @@ Message: Program Change 1 a 8*/
 #define PB6 8
 #define PB7 7
 #define PB8 6
-#define PBMUTE 5
-
 
 //Definition des pins utiliser pour les sorties relais
 #define R1 3
@@ -29,8 +27,8 @@ Message: Program Change 1 a 8*/
 #define RMUTE 4
 #define HEARTBEAT 5
 #define HEARTBEATVALUE 1000
-#define INCHANGEDELAY 1000
-#define ONDELAY 100
+#define INCHANGEDELAY 2000
+#define ONDELAY 1000
 
 
 // Midi Receiver
@@ -74,7 +72,16 @@ void setup()
   pinMode(PB6, INPUT_PULLUP);
   pinMode(PB7, INPUT_PULLUP);
   pinMode(PB8, INPUT_PULLUP);
-  pinMode(PBMUTE, INPUT_PULLUP);
+
+  digitalWrite(R1, HIGH);
+  digitalWrite(R2, HIGH);
+  digitalWrite(R3, HIGH);
+  digitalWrite(R4, HIGH);
+  digitalWrite(R5, HIGH);
+  digitalWrite(R6, HIGH);
+  digitalWrite(R7, HIGH);
+  digitalWrite(R8, HIGH);
+  digitalWrite(RMUTE, HIGH);
 
   pinMode(R1, OUTPUT);
   pinMode(R2, OUTPUT);
@@ -171,12 +178,15 @@ void loop()
   }
   //Read Push Button and send only one into mem
   readPushButtonToMem(); 
+
+  // If Delay Change done
   if (onDelay>0){
     onDelay--;
   }else{
     // Send the mem on the relay output
     refreshRelaisFromMem(); 
   }
+  
   // Si Reste du delay on decremente
   // Sinon fin du delais, remove le MUTE
   if (inChangeDelay>0){
@@ -195,12 +205,10 @@ void relaisMemWriter(int relaisMemNumber)
     if (relaisMemNumber == i){
       relaisMem[i]=1;
       clearAllMem(i); // Clear all the other mem, only one can be valid
-      
     }else{
       relaisMem[i]=0;
     }
   }
-  refreshRelaisFromMem();
 }
 
 
@@ -208,10 +216,10 @@ void relaisMemWriter(int relaisMemNumber)
 void refreshRelaisFromMem(){
   for (int i=1;i<9;i++){
     if (relaisMem[i]==1){
-      digitalWrite(relaisOrder[i],HIGH);
+      digitalWrite(relaisOrder[i],LOW);
       clearAllMem(i); //Clear all mem exept 
     }else {
-      digitalWrite(relaisOrder[i],LOW);
+      digitalWrite(relaisOrder[i],HIGH);
     }
   }
 }
@@ -220,8 +228,7 @@ void readPushButtonToMem()
 {
   for (int i=1;i<9;i++){
     if (digitalRead(pushButtonOrder[i]) == LOW){
-      relaisMem[i]=1;
-      clearAllMem(i);
+      relaisMemWriter(i);
     }
   }
     
@@ -232,5 +239,4 @@ void clearAllMem(int exeptRelais){
       relaisMem[i]=0;
   }  
 }
-
 

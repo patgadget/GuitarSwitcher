@@ -122,15 +122,11 @@ void loop()
   // Message MIDI car le bit 7 a ON
   if (incomingByte&0x80){
     firstByte=-1; //Donc ce n'est pas un DATA
-    if (incomingByte != MSG_MIDI_ACT_SENSE){ // Si ce n'est pas un ActiveSense on continue http://midi.teragonaudio.com/tech/midispec/sense.htm
-      // Est ce la Messagee 0xC0 PROGRAM CHANGE?
-      // et le bon Channel Midi?
-      if (!((incomingByte & 0xF0) ^ MSG_MIDI_PROG_CHG ) & !((incomingByte& 0x0F) ^ (MIDI_CHANNEL-1))){
-        lastValidMessage= (incomingByte & 0xF0); //On Garde la partie du message de gauche et on detruit le channel Midi
-      }
+    if (!((incomingByte & 0xF0) ^ MSG_MIDI_PROG_CHG ) & !((incomingByte& 0x0F) ^ (MIDI_CHANNEL-1))){
+      lastValidMessage= (incomingByte & 0xF0); //On Garde la partie du message de gauche et on detruit le channel Midi
     }
     else{
-      // Si c'est un timecode on srap et on repar a neuf
+      // Si c'est pas un message midi valid on srap et on repar a neuf
       // Ou tout autre Midi Message qu'attendu et que pas bon midi Channel
       lastValidMessage=-1;
     }
@@ -162,19 +158,6 @@ void loop()
           }
           if (incomingByte == 0x07){
             writeToMem(8);
-          }
-        firstByte=-1; // Receive my 2 bytes
-        }
-        else{
-          if (firstByte == 0x26 ){
-            if (incomingByte | 1){ // Any Velocity
-              //digitalWrite(R1, HIGH);
-            }
-          }  
-          if (firstByte == 0x27 ){
-            if (incomingByte | 1){ // Any Velocity
-              //digitalWrite(R1, LOW);
-            }
           }
         firstByte=-1; // Receive my 2 bytes
         }

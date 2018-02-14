@@ -53,7 +53,7 @@ int relaisOrder[] = {0, R1, R2, R3, R4, R5, R6, R7, R8, 0, 0 };
 int pushButtonOrder[] = {0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, 0, 0 };
 int heartBeat=0;
 int inChangeDelay=INCHANGEDELAY;
-int onDelay=ONDELAY;
+unsigned int onDelay=ONDELAY;
 
 void setup()
 {
@@ -73,6 +73,11 @@ void setup()
   pinMode(PB7, INPUT_PULLUP);
   pinMode(PB8, INPUT_PULLUP);
 
+  /* Digital Write to One before config the port
+   *  to an OUTPUT.
+   *  To prevent bit flashing on reset
+  */ 
+  
   digitalWrite(R1, HIGH);
   digitalWrite(R2, HIGH);
   digitalWrite(R3, HIGH);
@@ -135,28 +140,28 @@ void loop()
       if (lastValidMessage == MSG_MIDI_PROG_CHG){ //et PROGRAM CHANGE
         if (firstByte < 0 ){
           if (incomingByte == 0x00){
-            relaisMemWriter(1);
+            writeToMem(1);
           }
           if (incomingByte == 0x01){
-            relaisMemWriter(2);
+            writeToMem(2);
           }
           if (incomingByte == 0x02){
-            relaisMemWriter(3);
+            writeToMem(3);
           }
           if (incomingByte == 0x03){
-            relaisMemWriter(4);
+            writeToMem(4);
           }
           if (incomingByte == 0x04){
-            relaisMemWriter(5);
+            writeToMem(5);
           }
           if (incomingByte == 0x05){
-            relaisMemWriter(6);
+            writeToMem(6);
           }
           if (incomingByte == 0x06){
-            relaisMemWriter(7);
+            writeToMem(7);
           }
           if (incomingByte == 0x07){
-            relaisMemWriter(8);
+            writeToMem(8);
           }
         firstByte=-1; // Receive my 2 bytes
         }
@@ -177,14 +182,14 @@ void loop()
     }
   }
   //Read Push Button and send only one into mem
-  readPushButtonToMem(); 
+  PushButtonToMem(); 
 
   // If Delay Change done
   if (onDelay>0){
     onDelay--;
   }else{
     // Send the mem on the relay output
-    refreshRelaisFromMem(); 
+    memToRelais(); 
   }
   
   // Si Reste du delay on decremente
@@ -196,7 +201,7 @@ void loop()
   }
 }
 
-void relaisMemWriter(int relaisMemNumber)
+void writeToMem(int relaisMemNumber)
 { 
   digitalWrite(RMUTE,LOW);
   onDelay=ONDELAY;
@@ -213,7 +218,7 @@ void relaisMemWriter(int relaisMemNumber)
 
 
 // send the relaisMem[] array to the output pin
-void refreshRelaisFromMem(){
+void memToRelais(){
   for (int i=1;i<9;i++){
     if (relaisMem[i]==1){
       digitalWrite(relaisOrder[i],LOW);
@@ -224,11 +229,11 @@ void refreshRelaisFromMem(){
   }
 }
 
-void readPushButtonToMem()
+void PushButtonToMem()
 {
   for (int i=1;i<9;i++){
     if (digitalRead(pushButtonOrder[i]) == LOW){
-      relaisMemWriter(i);
+      writeToMem(i);
     }
   }
     

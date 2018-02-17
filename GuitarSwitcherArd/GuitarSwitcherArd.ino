@@ -115,24 +115,19 @@ void loop()
   }
   if (Serial.available() > 0) {
     incomingByte = Serial.read();
-      /*if (incomingByte != MSG_MIDI_ACT_SENSE){ // Si ce n'est pas un ActiveSense on continue http://midi.teragonaudio.com/tech/midispec/sense.htm
-        Serial.println(incomingByte, HEX);
-      }*/
-  }
-  // Message MIDI car le bit 7 a ON
-  if (incomingByte&0x80){
-    firstByte=-1; //Donc ce n'est pas un DATA
-    if (!((incomingByte & 0xF0) ^ MSG_MIDI_PROG_CHG ) & !((incomingByte& 0x0F) ^ (MIDI_CHANNEL-1))){
-      lastValidMessage= (incomingByte & 0xF0); //On Garde la partie du message de gauche et on detruit le channel Midi
-    }
+    // Message MIDI car le bit 7 a ON
+    if (incomingByte&0x80){
+      firstByte=-1; //Donc ce n'est pas un DATA
+      if (!((incomingByte & 0xF0) ^ MSG_MIDI_PROG_CHG ) & !((incomingByte& 0x0F) ^ (MIDI_CHANNEL-1))){
+        lastValidMessage= (incomingByte & 0xF0); //On Garde la partie du message de gauche et on detruit le channel Midi
+      }
+      else{
+        // Si c'est pas un message midi valid on srap et on repar a neuf
+        // Ou tout autre Midi Message qu'attendu et que pas bon midi Channel
+       lastValidMessage=-1;
+      }
+   }
     else{
-      // Si c'est pas un message midi valid on srap et on repar a neuf
-      // Ou tout autre Midi Message qu'attendu et que pas bon midi Channel
-      lastValidMessage=-1;
-    }
-  }
-  else{
-    if (lastValidMessage > 0){ //j'ai deja recu une Messagee Midi
       if (lastValidMessage == MSG_MIDI_PROG_CHG){ //et PROGRAM CHANGE
         if (firstByte < 0 ){
           if (incomingByte == 0x00){
@@ -159,7 +154,7 @@ void loop()
           if (incomingByte == 0x07){
             writeToMem(8);
           }
-        firstByte=-1; // Receive my 2 bytes
+          firstByte=-1; // Receive my 2 bytes
         }
       }
     }
@@ -180,7 +175,7 @@ void loop()
   if (inChangeDelay>0){
     inChangeDelay--;
   }else {
-    digitalWrite(RMUTE,HIGH);
+    digitalWrite(RMUTE,HIGH); //Enleve le Mute
   }
 }
 

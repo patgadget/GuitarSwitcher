@@ -1,3 +1,4 @@
 # GuitarSwitcher
 Switch 8 Guitar on a Single Amp
-![GitHub Logo](https://github.com/gnea/gnea-Media/blob/master/Grbl%20Logo/Grbl%20Logo%20250px.png?raw=true)
+
+![Guitar Switcher Back](https://github.com/patgadget/GuitarSwitcher/blob/master/Picture/25469894257_199cc6a9e9_z.jpg?raw=true)

@@ -98,10 +98,10 @@ void setup()
   pinMode(R8, OUTPUT);
   pinMode(RMUTE, OUTPUT);
   pinMode(HEARTBEAT, OUTPUT);
-  for (int i=0;i<10;i++){
-    relaisMem[i]=0;
-  }
-
+  writeToMem(1);
+  clearAllMem(1);
+  memToRelais();
+  
 }
 
 void loop()
